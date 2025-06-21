@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/app:/app
+    environment:
+      - ENVIRONMENT=development
+      - DATABASE_URL=sqlite:///./opensentinel.db
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+    restart: unless-stopped
+
+  # Tools service for running security tools
+  tools:
+    build:
+      context: ./tools
+      dockerfile: Dockerfile
+    volumes:
+      - ./tools:/tools
+      - ./data:/data
+    environment:
+      - TOOLS_DIR=/tools
+      - DATA_DIR=/data
+    command: tail -f /dev/null  # Keep container running
