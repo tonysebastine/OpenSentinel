@@ -1,0 +1,5 @@
+{
+  "name": "OpenSentinel Dashboard",
+  "description": "A web-based reporting dashboard for OpenSentinel, displaying scan history, vulnerability details, and AI-assisted summaries.",
+  "requestFramePermissions": []
+}
